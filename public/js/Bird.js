@@ -1,95 +1,124 @@
+/**
+ * BIRD CLASS
+ */
 class Bird {
-  constructor() {
-    this.top = 288;
-    // super();
+  constructor(
+    posTop = BIRD_POSITION_TOP,
+    posLeft = BIRD_POSITION_LEFT,
+    posRight = BIRD_POSITION_RIGHT,
+    posBottom = BIRD_POSITION_BOTTOM,
+    g = GRAVITY
+  ) {
+    this.positionTop = posTop;
+    this.positionLeft = posLeft;
+    this.gravity = g; // to simulate gravitational effect
+    this.positionRight = posRight;
+    this.positionBottom = posBottom;
   }
 
   create() {
-    // super.create();
     this.createBird();
     this.animateBird();
   }
 
+  /**
+   * create bird image element
+   */
   createBird() {
     this.bird = document.createElement("img");
     this.bird.classList.add("bird");
     this.bird.setAttribute("src", FLAP_BIRD[0]["src"]);
     this.bird.setAttribute("alt", FLAP_BIRD[0]["alt"]);
     this.bird.style.position = "absolute";
-    this.bird.style.top = "50%";
-    this.bird.style.left = "30%";
-    this.bird.style.transform = "translate(-50%, -50%)";
+    this.bird.style.top = toPx(this.positionTop);
+    this.bird.style.left = toPx(this.positionLeft);
+    this.bird.style.width = toPx(BIRD_WIDTH);
+    // this.bird.style.transform = "translate(-50%, -50%)";
   }
 
+  /**
+   * simulate bird flying
+   */
   animateBird() {
-    let count = 0;
+    let birdIndex = 0;
     this.animateBirdId = setInterval(() => {
-      this.bird.setAttribute("src", FLAP_BIRD[count]["src"]);
-      this.bird.setAttribute("alt", FLAP_BIRD[count]["alt"]);
-      count = (count + 1) % FLAP_BIRD.length;
+      this.bird.setAttribute("src", FLAP_BIRD[birdIndex]["src"]);
+      this.bird.setAttribute("alt", FLAP_BIRD[birdIndex]["alt"]);
+      birdIndex = (birdIndex + 1) % FLAP_BIRD.length;
     }, REFRESH_FLAP);
   }
 
-  moveBird() {
-    // document.addEventListener("keypress", (event) => {
-    //   if (event.code === "Space") {
-    //     this.decideMoveUp = true;
-    //     console.log(this.decideMoveUp);
-    //     this.top -= 20;
-    //     this.bird.style.top = toPx(this.top);
-    //     console.log(this.top);
-    //   }
-    // });
-    // this.top += 2;
-    // this.bird.style.top = toPx(this.top);
-    const moveBirdUp = () => {
-      this.top -= 20;
-      this.bird.style.top = toPx(this.top);
-      this.decideMoveUp = false;
-    };
-
-    const moveBirdDown = () => {
-      this.top += 2;
-      this.bird.style.top = toPx(this.top);
-    };
-
-    const checkKey = (event) => {
-      if (event.code === "Space") {
-        this.decideMoveUp = true;
-      }
-    };
-    document.onkeydown = checkKey;
-
-    if (this.decideMoveUp) {
-      moveBirdUp();
-    } else {
-      moveBirdDown();
-    }
-
-    // console.log(this.decideMoveUp);
-    // console.log(this.top);
-    // setInterval(() => {
-    //   document.addEventListener("keypress", (event) => {
-    //     if (event.code === "Space") {
-    //       this.top -= 1;
-    //       if (this.top <= 12) {
-    //         this.top = 12;
-    //       }
-    //       this.bird.style.top = toPx(this.top);
-
-    //       // console.log(this.top);
-    //     } else {
-    //       this.top += 0.05;
-    //       if (this.top >= CONTAINER_HEIGHT - CONTAINER_BASE_HEIGHT) {
-    //         this.top = CONTAINER_HEIGHT - CONTAINER_BASE_HEIGHT;
-    //       }
-    //       // console.log(this.top);
-    //       this.bird.style.top = toPx(this.top);
-    //     }
-    //   });
-    // }, 200);
-    // window.requestAnimationFrame(() => {
-    //   this.moveBird();
-    // });
+  // stop bird flapping animation
+  stopBirdAnimation() {
+    clearInterval(this.animateBirdId);
   }
+
+  /**
+   * move bird with the BIRD_JUMP VALUE
+   */
+  keyPressed(event) {
+    if (event.code === "Space") {
+      // this.moveBirdUp();
+      this.positionTop -= BIRD_JUMP;
+      if (this.positionTop <= 0) {
+        this.positionTop = 0;
+        this.positionBottom = this.positionTop + BIRD_HEIGHT;
+      }
+
+      this.gravity = GRAVITY; // gravity at initial value after each jump;
+      this.bird.style.top = toPx(this.positionTop);
+    }
+  }
+  moveBirdUp() {
+    document.addEventListener("keydown", (event) => {
+      this.keyPressed(event);
+    });
+  }
+
+  /**
+   * move bird downward with gravitational effect
+   */
+  moveBirdDown() {
+    this.positionTop += this.gravity;
+    this.positionBottom = this.positionTop + BIRD_HEIGHT;
+
+    this.gravity += GRAVITY;
+
+    if (this.positionTop >= CONTAINER_HEIGHT - CONTAINER_BASE_HEIGHT) {
+      // clearInterval(this.moveBirdDownId);
+      // this.stopBirdAnimation();
+    }
+    this.bird.style.top = toPx(this.positionTop);
+  }
+
+  /**
+   * move bird up with clicking Space key
+   */
+  moveBird() {
+    document.addEventListener("keydown", (event) => {
+      if (event.code === "Space") {
+        this.moveBirdUp();
+      }
+    });
+    window.requestAnimationFrame(() => {
+      this.moveBirdDown();
+    });
+  }
+
+  // checkCollision(pipe) {
+  //   console.log("abcd");
+  //   console.log(this.positionLeft);
+  //   console.log(pipe.gapPositionLeft);
+  //   if (
+  //     this.positionLeft >= pipe.gapPositionLeft &&
+  //     this.positionLeft <= pipe.gapPositionRight
+  //   ) {
+  //     if (
+  //       this.positionTop <= pipe.gapPositionTop ||
+  //       this.positionBottom >= pipe.gapPositionBottom
+  //     ) {
+  //       console.log("collision detected");
+  //     }
+  //   }
+  // }
 }

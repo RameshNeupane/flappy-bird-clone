@@ -1,3 +1,6 @@
+/**
+ * MAIN CONTAINER CLASS
+ */
 class Container {
   constructor(
     width = CONTAINER_WIDTH,
@@ -6,7 +9,8 @@ class Container {
     containerBaseHeight = CONTAINER_BASE_HEIGHT,
     bgDay = CONTAINER_BACKGROUND.day,
     bgNight = CONTAINER_BACKGROUND.night,
-    bgContainerBase = CONTAINER_BASE_BACKGROUND
+    bgContainerBase = CONTAINER_BASE_BACKGROUND,
+    containerBaseBgPositionY = CONTAINER_BASE_BG_POSIITON_Y
   ) {
     this.containerWidth = width;
     this.ContainerHeight = height;
@@ -15,22 +19,30 @@ class Container {
     this.containerBackgroundDay = bgDay;
     this.containerBackgroundNight = bgNight;
     this.containerBaseBackground = bgContainerBase;
-    this.containerBaseBgPositionY = 0;
-    // this.moveBase = true;
+    this.containerBaseBgPositionY = containerBaseBgPositionY;
   }
 
+  /**
+   *creates container with animated base
+   */
   create() {
-    this.createContainer();
-    this.createContainerBase();
-    this.insert(this.containerBase);
-    this.moveContainerBase();
-    // this.toggleMoveFlag();
+    this.createContainer(); // create main container
+    this.createContainerBase(); // create container's base section
+    this.insert(this.containerBase); // insert container base into the container
+    this.moveContainerBase(); // animate container base
   }
 
+  /**
+   * element is inserted into the container
+   * @param {HTML_DOM_ELEMENT} element
+   */
   insert(element) {
     this.container.appendChild(element);
   }
 
+  /**
+   * create container
+   */
   createContainer() {
     this.container = document.createElement("div");
     document.body.appendChild(this.container);
@@ -48,6 +60,9 @@ class Container {
     this.container.style.overflow = "hidden";
   }
 
+  /**
+   * create container base ie. bottom section of the container
+   */
   createContainerBase() {
     this.containerBase = document.createElement("div");
     this.containerBase.style.width = toPx(this.containerBaseWidth);
@@ -60,7 +75,9 @@ class Container {
     this.containerBase.style.backgroundRepeat = "repeat-x";
   }
 
-  // move base to the left with BASE_ANIMATION_SPEED on each frame
+  /**
+   * move base to the left with BASE_ANIMATION_SPEED on each frame
+   */
   moveContainerBase() {
     this.containerBaseBgPosition =
       (this.containerBaseBgPosition - BASE_ANIMATION_SPEED) %
@@ -71,12 +88,5 @@ class Container {
     window.requestAnimationFrame(() => {
       this.moveContainerBase();
     });
-  }
-
-  toggleMoveFlag() {
-    const id = setInterval(() => {
-      this.moveBase = !this.moveBase;
-      this.moveContainerBase();
-    }, 2000);
   }
 }

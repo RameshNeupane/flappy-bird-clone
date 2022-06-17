@@ -1,7 +1,7 @@
 /**
  * gets a number and returns string after concatenating px with the number
- * @param { number} num ie 10
- * @returns {string} ie. 10px
+ * @param { number} num : ie 10
+ * @returns {string} : ie. 10px
  */
 const toPx = (num) => {
   return `${num}px`;
