@@ -11,12 +11,13 @@ const CONTAINER_BACKGROUND = {
 };
 const CONTAINER_BASE_BACKGROUND = "../assets/base.png";
 const CONTAINER_BASE_BG_POSIITON_Y = 0;
-const BASE_ANIMATION_SPEED = CONTAINER_WIDTH * 0.015;
+const BASE_ANIMATION_SPEED = CONTAINER_WIDTH * 0.005;
 const PIPE_ANIMATION_SPEED = BASE_ANIMATION_SPEED;
 
 /**
  * CONSTANT VALUES USED IN CLASS BIRD
  */
+
 // values for bird useful for bird animation
 const FLAP_BIRD = [
   {
@@ -39,7 +40,7 @@ const FLAP_BIRD = [
 
 // alter image after the given value
 const REFRESH_FLAP = 120;
-const GRAVITY = 1; // initial gravitational value
+const GRAVITY = 0.1; // initial gravitational value
 const BIRD_WIDTH = 50;
 const BIRD_HEIGHT = 35.3;
 const BIRD_POSITION_TOP = CONTAINER_HEIGHT * 0.5;
@@ -63,15 +64,23 @@ const GAP_WIDTH = PIPE_CONTAINER_WIDTH;
 const PIPE_POSITION_AFTER_MOVEAWAY = 550; // new postion for the pipe after it moves away from the container
 const PIPE_LEFT_BOUNDARY = -50;
 
-const SCORE = {
-  0: "../assets/0.png",
-  1: "../assets/1.png",
-  1: "../assets/1.png",
-  3: "../assets/3.png",
-  4: "../assets/4.png",
-  5: "../assets/5.png",
-  6: "../assets/6.png",
-  7: "../assets/7.png",
-  8: "../assets/8.png",
-  9: "../assets/9.png",
-};
+/**
+ * CONSTANT VALUES FOR CLASS GAME
+ */
+
+const INITIAL_SCORE = 0;
+const INITIAL_IS_COLLISION = false;
+const SCORE_WIDTH = 100;
+const SCORE_IMG_HEIGHT = 40;
+const HIGH_SCORE_POSITION_TOP = 80;
+const CURRENT_SCORE_POSITION_TOP = 210;
+const HIGH_SCORE_POSITION_LEFT = CONTAINER_WIDTH / 2;
+const CURRENT_SCORE_POSITION_LEFT = CONTAINER_WIDTH / 2;
+const GAME_NAME_WIDTH = 300;
+const GAME_NAME_HEIGHT = 90;
+const GAME_NAME_POSITION_TOP = 330;
+const GAME_NAME_POSITION_LEFT = CONTAINER_WIDTH / 2;
+const SCORE_ELEMENT_POSITION_TOP = 100;
+const SCORE_ELEMENT_POSITION_LEFT = CONTAINER_WIDTH / 2;
+const GAME_OVER_POSITION_TOP = 300;
+const GAME_OVER_POSITION_LEFT = CONTAINER_WIDTH / 2;

@@ -41,6 +41,14 @@ class Container {
   }
 
   /**
+   * element is removed from the container
+   * @param {HTML_DOM_ELEMENT} element HTML DOM element
+   */
+  remove(element) {
+    this.container.removeChild(element);
+  }
+
+  /**
    * create container
    */
   createContainer() {
@@ -65,6 +73,7 @@ class Container {
    */
   createContainerBase() {
     this.containerBase = document.createElement("div");
+    this.containerBase.classList.add("container-base");
     this.containerBase.style.width = toPx(this.containerBaseWidth);
     this.containerBase.style.height = toPx(this.containerBaseHeight);
     this.containerBase.style.position = "absolute";

@@ -14,8 +14,12 @@ class Bird {
     this.gravity = g; // to simulate gravitational effect
     this.positionRight = posRight;
     this.positionBottom = posBottom;
+    this.isAlive = true;
   }
 
+  /**
+   * create bird element, append into the container and animate
+   */
   create() {
     this.createBird();
     this.animateBird();
@@ -33,7 +37,7 @@ class Bird {
     this.bird.style.top = toPx(this.positionTop);
     this.bird.style.left = toPx(this.positionLeft);
     this.bird.style.width = toPx(BIRD_WIDTH);
-    // this.bird.style.transform = "translate(-50%, -50%)";
+    this.bird.style.zIndex = "99";
   }
 
   /**
@@ -54,12 +58,13 @@ class Bird {
   }
 
   /**
-   * move bird with the BIRD_JUMP VALUE
+   * check if Space key is pressed and move bird up with the BIRD_JUMP VALUE
    */
   keyPressed(event) {
     if (event.code === "Space") {
-      // this.moveBirdUp();
       this.positionTop -= BIRD_JUMP;
+
+      // bird is restricted to go outside of the container
       if (this.positionTop <= 0) {
         this.positionTop = 0;
         this.positionBottom = this.positionTop + BIRD_HEIGHT;
@@ -69,10 +74,21 @@ class Bird {
       this.bird.style.top = toPx(this.positionTop);
     }
   }
+
+  /**
+   * handle keydown event listener to move bird up
+   */
   moveBirdUp() {
     document.addEventListener("keydown", (event) => {
       this.keyPressed(event);
     });
+
+    // if bird is dead, romove event listener
+    if (!this.isAlive) {
+      document.removeEventListener("keydown", (event) => {
+        this.keyPressed(event);
+      });
+    }
   }
 
   /**
@@ -84,41 +100,11 @@ class Bird {
 
     this.gravity += GRAVITY;
 
-    if (this.positionTop >= CONTAINER_HEIGHT - CONTAINER_BASE_HEIGHT) {
-      // clearInterval(this.moveBirdDownId);
-      // this.stopBirdAnimation();
+    // bird is restricted to move down from the ground
+    if (this.positionBottom >= CONTAINER_HEIGHT - CONTAINER_BASE_HEIGHT) {
+      this.positionBottom = CONTAINER_HEIGHT - CONTAINER_BASE_HEIGHT;
+      this.positionTop = this.positionBottom - BIRD_HEIGHT;
     }
     this.bird.style.top = toPx(this.positionTop);
   }
-
-  /**
-   * move bird up with clicking Space key
-   */
-  moveBird() {
-    document.addEventListener("keydown", (event) => {
-      if (event.code === "Space") {
-        this.moveBirdUp();
-      }
-    });
-    window.requestAnimationFrame(() => {
-      this.moveBirdDown();
-    });
-  }
-
-  // checkCollision(pipe) {
-  //   console.log("abcd");
-  //   console.log(this.positionLeft);
-  //   console.log(pipe.gapPositionLeft);
-  //   if (
-  //     this.positionLeft >= pipe.gapPositionLeft &&
-  //     this.positionLeft <= pipe.gapPositionRight
-  //   ) {
-  //     if (
-  //       this.positionTop <= pipe.gapPositionTop ||
-  //       this.positionBottom >= pipe.gapPositionBottom
-  //     ) {
-  //       console.log("collision detected");
-  //     }
-  //   }
-  // }
 }
