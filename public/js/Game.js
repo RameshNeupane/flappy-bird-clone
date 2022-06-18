@@ -6,7 +6,8 @@ class Game {
     this.container = new Container();
     this.container.create();
     this.score = INITIAL_SCORE;
-    this.highScore = window.localStorage.getItem("highScore");
+    // window.localStorage.setItem("highScore", 0);
+    this.highScore = window.localStorage.getItem("highScore") || 0;
     this.isCollision = INITIAL_IS_COLLISION;
   }
 
@@ -117,12 +118,12 @@ class Game {
   createStartBtn() {
     this.startBtn = document.createElement("div");
     this.startScreen.appendChild(this.startBtn);
-    this.startBtn.style.width = toPx(100);
-    this.startBtn.style.height = toPx(60);
+    this.startBtn.style.width = toPx(START_BTN_WIDTH);
+    this.startBtn.style.height = toPx(START_BTN_HEIGHT);
     this.startBtn.style.backgroundImage = "url(../assets/start-btn.png)";
     this.startBtn.style.position = "absolute";
-    this.startBtn.style.top = toPx(450);
-    this.startBtn.style.left = toPx(250);
+    this.startBtn.style.top = toPx(START_BTN_POSITION_TOP);
+    this.startBtn.style.left = toPx(START_BTN_POSITION_LEFT);
     this.startBtn.style.transform = "translate(-50%, -50%)";
     this.startBtn.style.cursor = "pointer";
     this.startBtn.setAttribute("title", "Play");
